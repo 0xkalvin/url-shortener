@@ -1,0 +1,30 @@
+
+
+
+
+#short-menu {
+    width: 500px;   
+    background: #ffffff;
+    box-shadow: 0 0 14px 0 rgba(0,0,0,0);
+    border-radius:  2px;
+    padding: 30px 20px;
+    margin-left: 80px;
+}
+
+
+#short-menu p {
+    color: #666;
+    font-size: 24px;
+    font-weight: bold;
+    display: block;
+}
+
+#short-menu  input {
+    margin-top: 10px;
+    height: 32px;
+    width: 100%;
+    color: #333;
+    font-size: 14px;
+    border: 0;
+    border-bottom: 1px solid #eee;
+}

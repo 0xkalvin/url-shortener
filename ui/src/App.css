@@ -1,0 +1,17 @@
+
+
+
+#app {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+h1 {
+    color: #666;
+    margin-bottom: 70px;
+}
