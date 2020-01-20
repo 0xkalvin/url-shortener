@@ -12,19 +12,30 @@ func main() {
 
 	loadConfig()
 	initDatabase()
+
+	short := new(ShortController)
+	long := new(LongController)
 	
 	router := gin.Default()
 	
 	router.Use(cors.Default())
+		
+	router.GET("/",indexHandler)
+	router.POST("/short", short.create)
+	router.GET("/short", short.index)
+	router.GET("/long/:short_url", long.show)
 	
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "Up and kicking",
-		})
-	})
-
-	router.POST("/short", generateShortUrl)
-	router.GET("/short/:short_url", getLongUrl)
+	router.NoRoute(notFoundHandler)
 
 	router.Run() 
+}
+
+func notFoundHandler(c *gin.Context) {
+	c.JSON(404, gin.H{"message": "Page not found"})
+}
+
+func indexHandler(c *gin.Context){
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Up and kicking",
+	})
 }
