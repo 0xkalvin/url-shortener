@@ -37,5 +37,16 @@ func (s ShortController) show (c *gin.Context){
 }
 
 func createShortURL(long_url string) string {
-	return "short"
+	seed_number := counter
+
+	alphabet := "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	base := len(alphabet)
+	hash := ""
+
+	for seed_number > 0 {
+		hash += string(alphabet[seed_number % base])
+		seed_number = seed_number / base
+	}
+
+	return hash
 }

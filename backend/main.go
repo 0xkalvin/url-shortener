@@ -4,14 +4,16 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-contrib/cors"
 	"net/http"
-
-
 )
+
+var counter int
+
 
 func main() {
 
 	loadConfig()
 	initDatabase()
+	counter = 0
 
 	short := new(ShortController)
 	long := new(LongController)
