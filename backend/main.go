@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-contrib/cors"
 	"net/http"
+	"fmt"
 )
 
 var counter int
@@ -12,7 +13,10 @@ var counter int
 func main() {
 
 	loadConfig()
-	initDatabase()
+	
+	db := setupDatabase()
+	
+	fmt.Println(db)
 	counter = 0
 
 	short := new(ShortController)
