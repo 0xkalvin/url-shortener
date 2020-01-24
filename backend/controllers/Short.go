@@ -15,7 +15,8 @@ func (s ShortController) Create (c *gin.Context) {
 	
 	c.BindJSON(&input)
 
-	var short_url = createShortURL(input.Long_url)
+	
+	var short_url = createShortURL(100000000)
 
 	c.JSON(200, gin.H{ "short_url": short_url , "long_url": input.Long_url })
 }
@@ -36,12 +37,13 @@ func (s ShortController) Show (c *gin.Context){
 	c.JSON(200, gin.H{ "short_url": short_url })
 }
 
-func createShortURL(long_url string) string {
-	seed_number := 0
+func createShortURL(counter uint64) string {
+	
+	var seed_number uint64 = counter
 
 	alphabet := "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	base := len(alphabet)
-	hash := ""
+	var base uint64 = uint64(len(alphabet))
+	var hash string = ""
 
 	for seed_number > 0 {
 		hash += string(alphabet[seed_number % base])
