@@ -1,4 +1,4 @@
-package main
+package controllers
 
 import (
 	"github.com/gin-gonic/gin"
@@ -10,7 +10,7 @@ type LongUrl struct {
 
 type ShortController struct {}
 
-func (s ShortController) create (c *gin.Context) {
+func (s ShortController) Create (c *gin.Context) {
 	var input LongUrl
 	
 	c.BindJSON(&input)
@@ -21,7 +21,7 @@ func (s ShortController) create (c *gin.Context) {
 }
 
 /*	Get all long URLs	*/
-func (s ShortController) index (c *gin.Context){
+func (s ShortController) Index (c *gin.Context){
 		
 	short_url := c.Param("short_url")
 
@@ -29,7 +29,7 @@ func (s ShortController) index (c *gin.Context){
 }
 
 
-func (s ShortController) show (c *gin.Context){
+func (s ShortController) Show (c *gin.Context){
 		
 	short_url := c.Param("short_url")
 
@@ -37,7 +37,7 @@ func (s ShortController) show (c *gin.Context){
 }
 
 func createShortURL(long_url string) string {
-	seed_number := counter
+	seed_number := 0
 
 	alphabet := "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	base := len(alphabet)

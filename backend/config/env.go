@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
     "github.com/joho/godotenv"
@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-func loadConfig() {
+func LoadConfig() {
   
 	err := godotenv.Load()
 	

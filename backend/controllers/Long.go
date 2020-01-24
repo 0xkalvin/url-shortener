@@ -1,12 +1,14 @@
-package main
+package controllers
 
 import (
 	"github.com/gin-gonic/gin"
 )
 
-type LongController struct {}
+type LongController struct {
+	
+}
 
-func (l LongController) index (c *gin.Context){
+func (l LongController) Index (c *gin.Context){
 		
 	short_url := c.Param("short_url")
 
@@ -14,7 +16,7 @@ func (l LongController) index (c *gin.Context){
 }
 
 
-func (l LongController) show (c *gin.Context){
+func (l LongController) Show (c *gin.Context){
 		
 	short_url := c.Param("short_url")
 
