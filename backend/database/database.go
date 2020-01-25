@@ -9,10 +9,11 @@ import (
 	"log"
 	"os"
 	"context"
+	"time"
 )
 
 func SetupDatabase() (*mongo.Database) {
-    ctx := context.Background()
+    ctx, _ := context.WithTimeout(context.Background(), 10 * time.Second)
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(os.Getenv("MONGO_URL")))
 	
     if err != nil {

@@ -1,40 +1,67 @@
 package controllers
 
 import (
+	"url-shortener-api/models"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/bson"
+	"fmt"
+	"time"
+	"os"
+	"context"
 )
 
-type LongUrl struct {
-	Long_url string `json:"long_url" binding:"required"`
-}
+type URL = models.URL
+
 
 type ShortController struct {}
 
 func (s ShortController) Create (c *gin.Context) {
-	var input LongUrl
 	
-	c.BindJSON(&input)
-
+	var url URL
 	
-	var short_url = createShortURL(100000000)
+	c.BindJSON(&url)
 
-	c.JSON(200, gin.H{ "short_url": short_url , "long_url": input.Long_url })
-}
+	collection := getCollection(c)
+	ctx, _ := context.WithTimeout(context.Background(), 10 * time.Second)
 
-/*	Get all long URLs	*/
-func (s ShortController) Index (c *gin.Context){
-		
-	short_url := c.Param("short_url")
+	url.Short = createShortURL(100000000)
+	url.CreatedAt = time.Now().Unix()
 
-	c.JSON(200, gin.H{ "short_url": short_url })
+	result, err := collection.InsertOne(ctx, url)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	c.JSON(200, result)
 }
 
 
 func (s ShortController) Show (c *gin.Context){
 		
 	short_url := c.Param("short_url")
+	fmt.Println(short_url)
 
-	c.JSON(200, gin.H{ "short_url": short_url })
+
+	collection := getCollection(c)
+	ctx, _ := context.WithTimeout(context.Background(), 10 * time.Second)
+	
+
+	cursor, err := collection.Find(ctx, bson.D{{}})
+
+	urls := []URL{}
+	if err == nil {
+		for cursor.Next(context.Background()) {
+			url := URL{}
+			cursor.Decode(&url)
+			urls = append(urls, url)
+		}
+	} else {
+		print(err.Error())
+	}
+
+	c.JSON(200, urls)
 }
 
 func createShortURL(counter uint64) string {
@@ -52,3 +79,14 @@ func createShortURL(counter uint64) string {
 
 	return hash
 }
+
+
+
+func getCollection(c *gin.Context) (*mongo.Collection){
+
+	db := c.MustGet("db").(*mongo.Database)
+	collection := db.Collection(os.Getenv("MONGO_COLLECTION"))
+
+	return collection
+}
+
