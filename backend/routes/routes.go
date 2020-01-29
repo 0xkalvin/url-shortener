@@ -16,7 +16,7 @@ func SetupRoutes(router *gin.Engine){
 	router.GET("/", indexHandler)
 	
 	router.POST("/short", short.Create)
-	router.GET("/short", short.Show)
+	router.GET("/short", short.Index)
 	
 	router.GET("/long/:short_url", long.Show)
 	

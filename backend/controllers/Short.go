@@ -12,7 +12,7 @@ import (
 )
 
 type URL = models.URL
-
+var counter_seed uint64 = 100000000
 
 type ShortController struct {}
 
@@ -29,7 +29,8 @@ func (s ShortController) Create (c *gin.Context) {
 	if err != nil {
 		fmt.Println(err)
 		
-		url.Short = createShortURL(100000000)
+		url.Short = createShortURL(counter_seed)
+		counter_seed++
 		url.CreatedAt = time.Now().Unix()
 	
 		result, _ := collection.InsertOne(ctx, url)
@@ -40,7 +41,7 @@ func (s ShortController) Create (c *gin.Context) {
 }
 
 
-func (s ShortController) Show (c *gin.Context){
+func (s ShortController) Index (c *gin.Context){
 		
 	short_url := c.Param("short_url")
 	fmt.Println(short_url)
