@@ -19,22 +19,24 @@ type ShortController struct {}
 func (s ShortController) Create (c *gin.Context) {
 	
 	var url URL
-	
 	c.BindJSON(&url)
 
 	collection := getCollection(c)
 	ctx, _ := context.WithTimeout(context.Background(), 10 * time.Second)
 
-	url.Short = createShortURL(100000000)
-	url.CreatedAt = time.Now().Unix()
-
-	result, err := collection.InsertOne(ctx, url)
-
+	err := collection.FindOne(ctx, bson.D{{"long_url", url.Long}}).Decode(&url)
+	
 	if err != nil {
 		fmt.Println(err)
+		
+		url.Short = createShortURL(100000000)
+		url.CreatedAt = time.Now().Unix()
+	
+		result, _ := collection.InsertOne(ctx, url)
+		fmt.Println(result)
 	}
 
-	c.JSON(200, result)
+	c.JSON(200, gin.H{ "short_url": url.Short })
 }
 
 
