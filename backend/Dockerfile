@@ -11,7 +11,7 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o output.out
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o output.out ./src 
 
 EXPOSE 8080
 

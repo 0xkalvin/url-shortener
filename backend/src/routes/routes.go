@@ -3,7 +3,7 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"url-shortener-api/controllers"
+	"url-shortener-api/src/controllers"
 
 )
 
@@ -16,9 +16,9 @@ func SetupRoutes(router *gin.Engine){
 	router.GET("/", indexHandler)
 	
 	router.POST("/short", short.Create)
-	router.GET("/short", short.Index)
+	router.GET("/short", short.GetAll)
 	
-	router.GET("/long/:short_url", long.Show)
+	router.GET("/long/:short_url", long.GetOne)
 	
 }
 

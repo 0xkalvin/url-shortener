@@ -13,7 +13,7 @@ type LongController struct {
 }
 
 
-func (l LongController) Show (c *gin.Context){
+func (l LongController) GetOne (c *gin.Context){
 		
 	short_url := c.Param("short_url")
 

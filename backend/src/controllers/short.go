@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"url-shortener-api/models"
+	"url-shortener-api/src/models"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/bson"
@@ -41,7 +41,7 @@ func (s ShortController) Create (c *gin.Context) {
 }
 
 
-func (s ShortController) Index (c *gin.Context){
+func (s ShortController) GetAll (c *gin.Context){
 		
 	short_url := c.Param("short_url")
 	fmt.Println(short_url)

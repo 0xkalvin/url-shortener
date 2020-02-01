@@ -3,10 +3,10 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-contrib/cors"
-	"url-shortener-api/config"
-	"url-shortener-api/database"
-	"url-shortener-api/middlewares"
-	"url-shortener-api/routes"
+	"url-shortener-api/src/config"
+	"url-shortener-api/src/database"
+	"url-shortener-api/src/middlewares"
+	"url-shortener-api/src/routes"
 )
 
 
