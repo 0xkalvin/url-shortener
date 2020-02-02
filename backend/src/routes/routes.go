@@ -13,16 +13,15 @@ func SetupRoutes(router *gin.Engine){
 	short := new(controllers.ShortController)
 	long := new(controllers.LongController)
 	
-	router.GET("/", indexHandler)
+	router.GET("/health", healthHandler)
 	
 	router.POST("/short", short.Create)
 	router.GET("/short", short.GetAll)
 	
 	router.GET("/long/:short_url", long.GetOne)
-	
 }
 
-func indexHandler(c *gin.Context){
+func healthHandler(c *gin.Context){
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Up and kicking",
 	})

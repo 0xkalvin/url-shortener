@@ -22,6 +22,20 @@ function App() {
         
     }
 
+    async function openOriginalPage(e){
+        e.preventDefault();
+        try {
+            const response = await api.get('/long/' + short_url );
+            const url = response.data.long_url
+            console.log(url);
+            const win = window.open(url, '_blank');
+            win.focus();
+        } catch (error) {
+         console.log(error);   
+        }
+    }
+    
+
   return (
     <div id="app">
         
@@ -53,9 +67,13 @@ function App() {
                     name="short_url"
                     id="short_url"
                     disabled
-                    value={short_url}
+                    value={ short_url ? 'http://localhost:8080/long/' + short_url : ''}
                 />  
-
+                <button 
+                onClick={openOriginalPage}
+                disabled={short_url === ''}
+                type="button"
+                >Go</button>  
             </div>
         </main>
 
