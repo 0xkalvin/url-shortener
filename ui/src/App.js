@@ -22,7 +22,7 @@ function App() {
         
     }
 
-    async function openOriginalPage(e){
+    async function openOriginalURL(e){
         e.preventDefault();
         try {
             const response = await api.get('/long/' + short_url );
@@ -33,6 +33,11 @@ function App() {
         } catch (error) {
          console.log(error);   
         }
+    }
+
+
+    function copyToClipboard(){
+        navigator.clipboard.writeText('http://localhost:8080/long/' + short_url)
     }
     
 
@@ -66,11 +71,11 @@ function App() {
                 <input 
                     name="short_url"
                     id="short_url"
-                    disabled
-                    value={ short_url ? 'http://localhost:8080/long/' + short_url : ''}
+                    value={ short_url ? 'https://atomic.url/' + short_url : ''}
+                    onClick={copyToClipboard}
                 />  
                 <button 
-                onClick={openOriginalPage}
+                onClick={openOriginalURL}
                 disabled={short_url === ''}
                 type="button"
                 >Go</button>  
