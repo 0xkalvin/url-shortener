@@ -16,10 +16,13 @@
   - Docker 
   - Docker-compose
 
-Start the application by running:
+ Start the application locally by running:
 ```
 docker-compose up --build
 ```
+
+
+As soon as the building process is completed, you can access the web app on `localhost:3000`
 
 To stop
 
