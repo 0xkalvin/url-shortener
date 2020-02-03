@@ -71,7 +71,7 @@ function App() {
                 <input 
                     name="short_url"
                     id="short_url"
-                    value={ short_url ? 'https://atomic.url/' + short_url : ''}
+                    value={ short_url ? 'atomic.url/' + short_url : ''}
                     onClick={copyToClipboard}
                 />  
                 <button 
