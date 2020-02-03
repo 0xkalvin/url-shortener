@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  backend:
+    container_name: backend
+    command: make all
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - './backend:/app'
+    ports:
+      - '8080:8080'
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    volumes:
+      - './ui:/app'
+      - '/app/node_modules'
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=development

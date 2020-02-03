@@ -1,18 +1,22 @@
   # Atomic URL
 
-  This is a simple URL shortener application.
+  This is a simple URL shortener application. 
 
 
-  ## Build & run 
+  ## Build and run
 
-  ### Backend
+  ### Requirements
+  - Docker 
+  - Docker-compose
 
-  ```
-  make
-  ```
-  
-  ### Frontend
+Start the application by running:
+```
+docker-compose up --build
+```
 
-  ```
-  yarn start
-  ```
+To stop
+
+```
+docker-compose stop
+```
+
