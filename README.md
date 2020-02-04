@@ -8,13 +8,17 @@
   <img src="https://github.com/0xkalvin/url-shortener/blob/master/docs/print.png?raw=true" width="1000" alt="accessibility text">
 </p>
 
-
-
-  ## Build and run
-
+  ## Installation
+  
   ### Requirements
   - Docker 
   - Docker-compose
+  
+  ```
+  git clone https://github.com/0xkalvin/url-shortener.git &&
+  cd url-shortener
+ ```
+  ### Build and run
 
  Start the application locally by running:
 ```

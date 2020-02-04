@@ -1,6 +1,11 @@
 version: '3.7'
 
 services:
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - "27017:27017"
   backend:
     container_name: backend
     command: make all
@@ -11,6 +16,12 @@ services:
       - './backend:/app'
     ports:
       - '8080:8080'
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/urlshortener
+      - MONGO_DATABASE=urlshortener
+      - MONGO_COLLECTION=urls
+    links:
+      - mongo
 
   frontend:
     container_name: frontend
