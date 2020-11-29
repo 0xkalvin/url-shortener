@@ -1,7 +1,7 @@
 version: "2.3"
 
 services:
-  dynamodb-local:
+  dynamodb:
     image: amazon/dynamodb-local
     container_name: dynamodb
     ports:
@@ -12,3 +12,13 @@ services:
     container_name: redis
     ports:
       - "6379:6379"
+
+  url-shortener:
+    container_name: url-shortener
+    build:
+      context: .
+    environment:
+      - PORT=3000
+    depends_on:
+      - dynamodb
+      - redis
