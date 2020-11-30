@@ -12,12 +12,12 @@ import (
 func initializeRouter() *gin.Engine {
 	router := gin.New()
 
-	router.Use(middlewares.HTTPLogger())
-
 	healthCheckController := new(controllers.HealthCheckController)
 	UserController := new(controllers.UserController)
 
 	router.GET("/_health_check", healthCheckController.Show)
+
+	router.Use(middlewares.HTTPLogger())
 
 	v1 := router.Group("v1")
 	{
