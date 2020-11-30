@@ -19,6 +19,7 @@ services:
       context: .
     environment:
       - PORT=3000
+      - GIN_MODE=release
     depends_on:
       - dynamodb
       - redis
