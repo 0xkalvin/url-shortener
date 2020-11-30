@@ -1,7 +1,8 @@
 package database
 
 import (
-	"log"
+	log "github.com/0xkalvin/url-shortener/logger"
+
 	"os"
 
 	redis "github.com/go-redis/redis/v8"
@@ -16,7 +17,9 @@ func InitializeRedis() *redis.Client {
 
 	client := redis.NewClient(options)
 
-	log.Println("Redis is connected")
+	logger := log.GetLogger()
+
+	logger.Info("Redis is connected")
 
 	return client
 }

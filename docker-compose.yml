@@ -21,6 +21,7 @@ services:
       - "3000:3000"
     environment:
       - PORT=3000
+      - ENV=test
       - GIN_MODE=release
       - DYNAMODB_REGION=us-east-1
       - DYNAMODB_ENDPOINT=http://dynamodb:8000

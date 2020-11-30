@@ -1,9 +1,9 @@
 package database
 
 import (
-	"log"
 	"os"
 
+	log "github.com/0xkalvin/url-shortener/logger"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
@@ -20,7 +20,9 @@ func InitializeDynamoDB() *dynamodb.DynamoDB {
 
 	client := dynamodb.New(session)
 
-	log.Println("DynamoDB is connected")
+	logger := log.GetLogger()
+
+	logger.Info("DynamoDB is connected")
 
 	return client
 }

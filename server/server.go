@@ -3,21 +3,24 @@ package server
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	log "github.com/0xkalvin/url-shortener/logger"
 )
 
 func setupGracefulShutdown(server *http.Server) {
+	logger := log.GetLogger()
+
 	signalListener := make(chan os.Signal)
 
 	signal.Notify(signalListener, syscall.SIGINT, syscall.SIGTERM)
 	<-signalListener
 
-	log.Println("Shutting down server...")
+	logger.Info("Gracefully shutting down server...")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 
@@ -26,20 +29,23 @@ func setupGracefulShutdown(server *http.Server) {
 	err := server.Shutdown(ctx)
 
 	if err != nil {
-		log.Fatal("Server forced to shutdown:", err)
+		logger.Fatal("Server forced to shutdown:", err)
 		os.Exit(1)
 	}
 
-	log.Println("Server exiting...")
+	logger.Info("Server closed. Exiting process...")
 
 	os.Exit(0)
 }
 
 func startServer(server *http.Server) {
+
 	err := server.ListenAndServe()
 
 	if err != nil {
-		log.Fatal("Server failed to initialize")
+		logger := log.GetLogger()
+
+		logger.Fatal("Server failed to initialize")
 
 		os.Exit(1)
 	}
@@ -58,7 +64,9 @@ func Run() {
 
 	go startServer(server)
 
-	log.Println("Server is up and kicking")
+	logger := log.GetLogger()
+
+	logger.Info("Server is up and kicking")
 
 	setupGracefulShutdown(server)
 }
