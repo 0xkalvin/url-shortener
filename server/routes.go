@@ -4,13 +4,15 @@ import (
 	"net/http"
 
 	"github.com/0xkalvin/url-shortener/controllers"
+	"github.com/0xkalvin/url-shortener/middlewares"
+
 	"github.com/gin-gonic/gin"
 )
 
 func initializeRouter() *gin.Engine {
 	router := gin.New()
 
-	router.Use(gin.Logger())
+	router.Use(middlewares.HTTPLogger())
 
 	healthCheckController := new(controllers.HealthCheckController)
 	UserController := new(controllers.UserController)
