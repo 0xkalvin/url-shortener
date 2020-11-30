@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -46,7 +47,7 @@ func startServer(server *http.Server) {
 
 // Run app
 func Run() {
-	var address = ":3000"
+	var address = fmt.Sprintf(":%s", os.Getenv("PORT"))
 
 	router := initializeRouter()
 
