@@ -9,70 +9,44 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Request struct
-type Request struct {
-	Message   string    `json:"message"`
-	URL       string    `json:"url"`
-	Method    string    `json:"method"`
-	StartTime time.Time `json:"start_time"`
-	From      string    `json:"from"`
-}
-
-// Response struct
-type Response struct {
-	Message   string        `json:"message"`
-	URL       string        `json:"url"`
-	Method    string        `json:"method"`
-	StartTime time.Time     `json:"start_time"`
-	From      string        `json:"from"`
-	Latency   time.Duration `json:"latency"`
-	Status    int           `json:"status"`
-}
-
 // HTTPLogger for logging requests and responses
 func HTTPLogger() gin.HandlerFunc {
 	return func(context *gin.Context) {
-		logger := log.GetLogger()
+		startTime := time.Now()
 
-		request := new(Request)
+		baseFields := logrus.Fields{
+			"url":        context.Request.URL.Path,
+			"method":     context.Request.Method,
+			"start_time": startTime,
+		}
 
-		request.Message = "Request received"
-		request.URL = context.Request.URL.Path
-		request.Method = context.Request.Method
-		request.StartTime = time.Now()
-		request.From = "Request"
+		baseRequestlogger := log.GetLogger().WithFields(baseFields)
 
-		logger.WithFields(logrus.Fields{
-			"request": request,
-		}).Info()
+		baseRequestlogger.WithFields(logrus.Fields{
+			"from": "Request",
+		}).Info("Request received")
 
 		context.Next()
 
-		response := new(Response)
+		status := context.Writer.Status()
 
-		response.Message = "Request ended"
-		response.URL = context.Request.URL.Path
-		response.Method = context.Request.Method
-		response.StartTime = time.Now()
-		response.From = "Response"
-		response.Latency = time.Since(request.StartTime)
-		response.Status = context.Writer.Status()
-
-		responseLogger := logger.WithFields(logrus.Fields{
-			"response": response,
+		responseLogger := baseRequestlogger.WithFields(logrus.Fields{
+			"from":    "Response",
+			"latency": time.Since(startTime),
+			"status":  status,
 		})
 
-		if response.Status >= 400 && response.Status < 500 {
+		if status >= 400 && status < 500 {
 
-			responseLogger.Warn()
+			responseLogger.Warn("Request ended with client error")
 
-		} else if response.Status >= 500 {
+		} else if status >= 500 {
 
-			responseLogger.Error()
+			responseLogger.Error("Request ended with internal error")
 
 		} else {
 
-			responseLogger.Info()
+			responseLogger.Info("Request ended successfully")
 		}
 
 	}
