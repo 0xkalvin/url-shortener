@@ -1,4 +1,4 @@
-.PHONY: build database dev run url-shortener
+.PHONY: build database dev down run url-shortener
 
 NAME=url-shortener
 
@@ -14,6 +14,9 @@ database:
 
 dev:
 	@go run ./main.go
+
+down:
+	@docker-compose down --rmi all -v --remove-orphans
 
 run: build
 	@./${NAME}
