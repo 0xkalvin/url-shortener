@@ -18,11 +18,11 @@ func InitializeDynamoDB() *dynamodb.DynamoDB {
 
 	session := session.Must(session.NewSession(config))
 
-	client := dynamodb.New(session)
+	dynamoDBClient := dynamodb.New(session)
 
 	logger := log.GetLogger()
 
 	logger.Info("DynamoDB is connected")
 
-	return client
+	return dynamoDBClient
 }
