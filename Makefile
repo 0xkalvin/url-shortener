@@ -16,10 +16,10 @@ dev:
 	@go run ./main.go
 
 down:
-	@docker-compose down --rmi all -v --remove-orphans
+	@docker-compose down --rmi local -v --remove-orphans
 
 run: build
 	@./${NAME}
 
 url-shortener:
-	@docker-compose up url-shortener
+	@docker-compose up --build url-shortener 
