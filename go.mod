@@ -6,6 +6,7 @@ require (
 	github.com/aws/aws-sdk-go v1.35.35
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
+	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/go-redis/redis/v8 v8.4.0
 	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/json-iterator/go v1.1.10 // indirect
@@ -16,5 +17,6 @@ require (
 	golang.org/x/crypto v0.0.0-20201124201722-c8d3bf9c5392 // indirect
 	golang.org/x/sys v0.0.0-20201126233918-771906719818 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
+	gopkg.in/lucsky/cuid.v1 v1.0.1
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

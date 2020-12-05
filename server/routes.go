@@ -3,17 +3,28 @@ package server
 import (
 	"net/http"
 
-	"github.com/0xkalvin/url-shortener/controllers"
-	"github.com/0xkalvin/url-shortener/middlewares"
-
 	"github.com/gin-gonic/gin"
+
+	"github.com/0xkalvin/url-shortener/repositories"
+
+	"github.com/0xkalvin/url-shortener/controllers"
+	"github.com/0xkalvin/url-shortener/database"
+	"github.com/0xkalvin/url-shortener/middlewares"
+	"github.com/0xkalvin/url-shortener/services"
 )
 
 func initializeRouter() *gin.Engine {
-	router := gin.New()
+	dynamoDBClient := database.InitializeDynamoDB()
+	redisClient := database.InitializeRedis()
+
+	userRepository := repositories.NewUserRepository(dynamoDBClient, redisClient)
+
+	userService := services.NewUserService(*userRepository)
 
 	healthCheckController := new(controllers.HealthCheckController)
-	UserController := new(controllers.UserController)
+	UserController := controllers.NewUserController(*userService)
+
+	router := gin.New()
 
 	router.GET("/_health_check", healthCheckController.Show)
 
