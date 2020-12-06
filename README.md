@@ -51,10 +51,16 @@ minikube service url-shortener
 ```
 
 
-When you're done, delete everything with
+When you're done, delete the application with
 
 ```
 kubectl delete -f kubernetes
+```
+
+And also delete the minikube cluster
+
+```
+minikube delete --all
 ```
 
 
