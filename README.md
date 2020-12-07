@@ -32,7 +32,7 @@ First of all, start the minikube cluster
 minikube start
 ```
 
-Apply everything with
+Apply everything by running
 
 ```
 kubectl apply -f kubernetes
@@ -44,7 +44,7 @@ You can watch all pods coming alive with
 kubectl get pods -w
 ```
 
-To find the application URL exposed in our cluster by the service, you can go with
+To find the application URL exposed in our cluster by the service, type
 
 ```
 minikube service url-shortener
@@ -64,6 +64,6 @@ minikube delete --all
 ```
 
 
-## Production envinroment
+## Production environment
 
 To do
