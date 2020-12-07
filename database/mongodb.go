@@ -23,6 +23,8 @@ func InitializeMongoDB() *mongo.Database {
 		os.Getenv("MONGODB_ENDPOINT"),
 	)
 
+	logger.Info("Attempting to connect to mongodb...")
+
 	client, err := mongo.NewClient(options.Client().ApplyURI(connectionURL))
 
 	if err != nil {
@@ -36,13 +38,13 @@ func InitializeMongoDB() *mongo.Database {
 	err = client.Connect(ctx)
 
 	if err != nil {
-		logger.Errorf("Failed to connect to cluster: %v", err)
+		logger.Errorf("Failed to connect to mongodb cluster: %v", err)
 	}
 
 	err = client.Ping(ctx, nil)
 
 	if err != nil {
-		logger.Errorf("Failed to ping cluster: %v", err)
+		logger.Errorf("Failed to ping mongodb cluster: %v", err)
 	}
 
 	database := client.Database("urlshortener")
