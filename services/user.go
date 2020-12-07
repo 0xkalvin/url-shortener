@@ -41,3 +41,18 @@ func (service *UserService) CreateUser(name string, email string) (*models.User,
 
 	return user, nil
 }
+
+// FindOneUser returns an user if it exists
+func (service *UserService) FindOneUser(id string) (*models.User, error) {
+	logger := log.GetLogger()
+
+	user, err := service.Repository.FindOne(id)
+
+	if err != nil {
+		logger.Error("Failed to find user entity")
+
+		return nil, err
+	}
+
+	return user, nil
+}

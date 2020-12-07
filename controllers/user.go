@@ -53,3 +53,21 @@ func (controller UserController) Create(context *gin.Context) {
 
 	context.JSON(http.StatusOK, user)
 }
+
+// Show returns an user
+func (controller UserController) Show(context *gin.Context) {
+	userID := context.Param("id")
+
+	user, err := controller.Service.FindOneUser(userID)
+
+	if err != nil {
+		context.JSON(
+			http.StatusInternalServerError,
+			gin.H{"error_type": "Internal server error"},
+		)
+
+		return
+	}
+
+	context.JSON(http.StatusOK, user)
+}

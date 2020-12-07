@@ -35,6 +35,8 @@ func initializeRouter() *gin.Engine {
 	v1 := router.Group("v1")
 	{
 		v1.POST("/users", UserController.Create)
+		v1.GET("/users/:id", UserController.Show)
+
 	}
 
 	router.NoRoute(func(context *gin.Context) {
