@@ -44,7 +44,7 @@ spec:
             - name: MONGODB_PASSWORD
               value: rootpassword
             - name: MONGODB_ENDPOINT
-              value: mongodb:27017
+              value: mongo:27017
           ports:
           - name: http
             containerPort: 3000
