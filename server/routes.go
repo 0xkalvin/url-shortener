@@ -14,10 +14,12 @@ import (
 )
 
 func initializeRouter() *gin.Engine {
-	dynamoDBClient := database.InitializeDynamoDB()
+	// dynamoDBClient := database.InitializeDynamoDB()
+	mongoDB := database.InitializeMongoDB()
+
 	redisClient := database.InitializeRedis()
 
-	userRepository := repositories.NewUserRepository(dynamoDBClient, redisClient)
+	userRepository := repositories.NewUserRepository(mongoDB, redisClient)
 
 	userService := services.NewUserService(*userRepository)
 
