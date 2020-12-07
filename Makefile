@@ -10,7 +10,7 @@ build:
 	@go build -o ${NAME}
 
 database:
-	@docker-compose up -d dynamodb redis
+	@docker-compose up -d mongodb redis
 
 dev:
 	@go run ./main.go

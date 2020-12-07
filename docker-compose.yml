@@ -1,11 +1,15 @@
 version: "2.3"
 
 services:
-  dynamodb:
-    image: amazon/dynamodb-local
-    container_name: dynamodb
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+      MONGO_INITDB_DATABASE: urlshortener
     ports:
-      - "8000:8000"
+      - 27017:27017
 
   redis:
     image: "redis:alpine"
@@ -27,6 +31,9 @@ services:
       - DYNAMODB_ENDPOINT=http://dynamodb:8000
       - REDIS_ENDPOINT=http://redis:6379
       - REDIS_PASSWORD=""
+      - MONGODB_USERNAME=root
+      - MONGODB_PASSWORD=rootpassword
+      - MONGODB_ENDPOINT=mongodb:27017
     depends_on:
-      - dynamodb
+      - mongodb
       - redis
