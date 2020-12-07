@@ -27,8 +27,6 @@ services:
       - PORT=3000
       - ENV=test
       - GIN_MODE=release
-      - DYNAMODB_REGION=us-east-1
-      - DYNAMODB_ENDPOINT=http://dynamodb:8000
       - REDIS_ENDPOINT=http://redis:6379
       - REDIS_PASSWORD=""
       - MONGODB_USERNAME=root

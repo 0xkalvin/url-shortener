@@ -35,14 +35,16 @@ spec:
               value: production
             - name: GIN_MODE
               value: release
-            - name: DYNAMODB_REGION
-              value: us-east-1
-            - name: DYNAMODB_ENDPOINT
-              value: http://dynamodb:8000
             - name: REDIS_ENDPOINT
               value: http://redis:6379
             - name: REDIS_PASSWORD
               value: 
+            - name: MONGODB_USERNAME
+              value: root
+            - name: MONGODB_PASSWORD
+              value: rootpassword
+            - name: MONGODB_ENDPOINT
+              value: mongodb:27017
           ports:
           - name: http
             containerPort: 3000

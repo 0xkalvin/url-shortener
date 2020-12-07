@@ -4,7 +4,7 @@ A highly scalable URL shortener API written in golang.
 
 ## Tech Stack
 - Golang
-- DynamoDB
+- MongoDB
 - Redis
 - Terraform
 - EKS
@@ -20,7 +20,7 @@ For local development, you can start everything up using docker-compose by runni
 make all
 ```
 
-When it's done, three containers will be up and running: a Redis database for caching, a DynamoDB as the main general database and the URL shortener API itself.
+When it's done, three containers will be up and running: a Redis database for caching, a MongoDB as the main general database and the URL shortener API itself.
 
 ### Minikube
 
