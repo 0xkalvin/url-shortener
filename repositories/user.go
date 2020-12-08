@@ -32,7 +32,7 @@ func NewUserRepository(database *mongo.Database, cache *redis.Client) *UserRepos
 func (repository *UserRepository) Create(user *models.User) (*models.User, error) {
 	logger := log.GetLogger()
 
-	collection := repository.Database.Collection("posts")
+	collection := repository.Database.Collection("users")
 
 	insertResult, err := collection.InsertOne(context.TODO(), user)
 
@@ -55,7 +55,7 @@ func (repository *UserRepository) Create(user *models.User) (*models.User, error
 func (repository *UserRepository) FindOne(userID string) (*models.User, error) {
 	logger := log.GetLogger()
 
-	collection := repository.Database.Collection("posts")
+	collection := repository.Database.Collection("users")
 
 	var user models.User
 
