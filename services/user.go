@@ -6,7 +6,7 @@ import (
 	log "github.com/0xkalvin/url-shortener/logger"
 	"github.com/0xkalvin/url-shortener/models"
 	"github.com/0xkalvin/url-shortener/repositories"
-	"gopkg.in/lucsky/cuid.v1"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 //UserService  interface
@@ -26,7 +26,6 @@ func (service *UserService) CreateUser(name string, email string) (*models.User,
 	logger := log.GetLogger()
 
 	user, err := service.Repository.Create(&models.User{
-		ID:        cuid.New(),
 		Name:      name,
 		Email:     email,
 		CreatedAt: time.Now().Unix(),
@@ -43,10 +42,10 @@ func (service *UserService) CreateUser(name string, email string) (*models.User,
 }
 
 // FindOneUser returns an user if it exists
-func (service *UserService) FindOneUser(id string) (*models.User, error) {
+func (service *UserService) FindOneUser(objectID primitive.ObjectID) (*models.User, error) {
 	logger := log.GetLogger()
 
-	user, err := service.Repository.FindOne(id)
+	user, err := service.Repository.FindByID(objectID)
 
 	if err != nil {
 		logger.Error("Failed to find user entity")

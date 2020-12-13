@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	log "github.com/0xkalvin/url-shortener/logger"
 	"github.com/0xkalvin/url-shortener/schemas"
@@ -31,7 +32,10 @@ func (controller UserController) Create(context *gin.Context) {
 	if err != nil {
 		context.JSON(
 			http.StatusUnprocessableEntity,
-			gin.H{"error_type": "Invalid request body"},
+			gin.H{
+				"error_type":    "Invalid request body",
+				"error_message": err.Error(),
+			},
 		)
 
 		return
@@ -56,9 +60,27 @@ func (controller UserController) Create(context *gin.Context) {
 
 // Show returns an user
 func (controller UserController) Show(context *gin.Context) {
-	userID := context.Param("id")
+	logger := log.GetLogger()
 
-	user, err := controller.Service.FindOneUser(userID)
+	userIDAsString := context.Param("id")
+
+	userObjectID, err := primitive.ObjectIDFromHex(userIDAsString)
+
+	if err != nil {
+		logger.Error("Failed to build object id for user")
+
+		context.JSON(
+			http.StatusBadRequest,
+			gin.H{
+				"error_type":    "Bad request",
+				"error_message": "Invalid user ID",
+			},
+		)
+
+		return
+	}
+
+	user, err := controller.Service.FindOneUser(userObjectID)
 
 	if err != nil {
 		context.JSON(
