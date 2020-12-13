@@ -36,7 +36,7 @@ spec:
             - name: GIN_MODE
               value: release
             - name: REDIS_ENDPOINT
-              value: http://redis:6379
+              value: redis:6379
             - name: REDIS_PASSWORD
               value: 
             - name: MONGODB_USERNAME
