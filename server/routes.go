@@ -18,12 +18,15 @@ func initializeRouter() *gin.Engine {
 
 	redisClient := database.InitializeRedis()
 
-	userRepository := repositories.NewUserRepository(mongoDB, redisClient)
+	userRepository := repositories.NewUserRepository(mongoDB)
+	shortURLRepository := repositories.NewShortURLRepository(mongoDB, redisClient)
 
 	userService := services.NewUserService(*userRepository)
+	shortURLService := services.NewShortURLService(*shortURLRepository, *userRepository)
 
 	healthCheckController := new(controllers.HealthCheckController)
 	UserController := controllers.NewUserController(*userService)
+	shortURLController := controllers.NewShortURLController(*shortURLService)
 
 	router := gin.New()
 
@@ -35,6 +38,9 @@ func initializeRouter() *gin.Engine {
 	{
 		v1.POST("/users", UserController.Create)
 		v1.GET("/users/:id", UserController.Show)
+
+		v1.POST("/short_urls", shortURLController.Create)
+		v1.GET("/short_urls/:hash", shortURLController.Show)
 
 	}
 

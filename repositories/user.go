@@ -4,7 +4,6 @@ import (
 	"context"
 	"time"
 
-	redis "github.com/go-redis/redis/v8"
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -17,14 +16,12 @@ import (
 // UserRepository abstraction
 type UserRepository struct {
 	Database *mongo.Database
-	Cache    *redis.Client
 }
 
 // NewUserRepository creates an repository with each database layer
-func NewUserRepository(database *mongo.Database, cache *redis.Client) *UserRepository {
+func NewUserRepository(database *mongo.Database) *UserRepository {
 	return &UserRepository{
 		Database: database,
-		Cache:    cache,
 	}
 }
 
@@ -34,25 +31,25 @@ func (repository *UserRepository) Create(user *models.User) (*models.User, error
 
 	collection := repository.Database.Collection("users")
 
-	insertResult, err := collection.InsertOne(context.TODO(), user)
+	user.ID = primitive.NewObjectID()
+
+	_, err := collection.InsertOne(context.TODO(), user)
 
 	if err != nil {
 		logger.WithFields(logrus.Fields{
 			"error": err,
 		}).Fatal("Failed to store user on collection")
+
+		return nil, err
 	}
-
-	objectID, _ := insertResult.InsertedID.(primitive.ObjectID)
-
-	user.ID = objectID.Hex()
 
 	logger.Info("Successfully stored user on mongoDB")
 
 	return user, nil
 }
 
-// FindOne method returns an user from mongo collection if it exists
-func (repository *UserRepository) FindOne(userID string) (*models.User, error) {
+// FindByID method returns an user from mongo collection if it exists
+func (repository *UserRepository) FindByID(objectID primitive.ObjectID) (*models.User, error) {
 	logger := log.GetLogger()
 
 	collection := repository.Database.Collection("users")
@@ -63,14 +60,7 @@ func (repository *UserRepository) FindOne(userID string) (*models.User, error) {
 
 	defer cancel()
 
-	objectID, err := primitive.ObjectIDFromHex(userID)
-
-	if err != nil {
-		logger.Fatal("Failed to build object id for user")
-		return nil, err
-	}
-
-	err = collection.FindOne(
+	err := collection.FindOne(
 		ctx,
 		bson.M{"_id": objectID},
 	).Decode(&user)
@@ -78,7 +68,9 @@ func (repository *UserRepository) FindOne(userID string) (*models.User, error) {
 	if err != nil {
 		logger.WithFields(logrus.Fields{
 			"error": err,
-		}).Fatal("Failed to find user on collection")
+		}).Error("Failed to find user on collection")
+
+		return nil, err
 	}
 
 	logger.Info("Successfully found user")
