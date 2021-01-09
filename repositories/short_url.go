@@ -92,7 +92,7 @@ func (repository *ShortURLRepository) SaveToCache(url *models.ShortURL) (*models
 	ctx := context.Background()
 	key := url.Hash
 	value := url.OriginalURL
-	expiration := time.Second * time.Duration(url.ExpiresAt)
+	expiration := time.Minute * time.Duration(url.ExpiresAt)
 
 	err := repository.Cache.Set(ctx, key, value, expiration).Err()
 
