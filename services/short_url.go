@@ -11,7 +11,7 @@ import (
 	"github.com/0xkalvin/url-shortener/repositories"
 	"github.com/0xkalvin/url-shortener/schemas"
 
-	"gopkg.in/lucsky/cuid.v1"
+	"github.com/teris-io/shortid"
 )
 
 // ShortURLService interface
@@ -64,8 +64,16 @@ func (service *ShortURLService) CreateURL(payload schemas.ShortURLPostSchema) (*
 		return alreadyExists, nil
 	}
 
+	hash, err := shortid.Generate()
+
+	if err != nil {
+		logger.Error("Failed to generate short id")
+
+		return nil, err
+	}
+
 	shortURL := &models.ShortURL{
-		Hash:        cuid.New(),
+		Hash:        hash,
 		OriginalURL: payload.OriginalURL,
 		UserID:      user.ID,
 		ExpiresAt:   payload.ExpiresAt,
