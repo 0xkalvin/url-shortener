@@ -2,12 +2,17 @@
 
 A highly scalable URL shortener API written in golang.
 
+<p align="center">
+<img src="./docs/images/diagram.png" alt="drawing" width="800" height="400"/>
+</p>
+
+
 ## Tech Stack
 
-- Golang
-- MongoDB
-- Redis
-- Terraform
+- Golang :heavy_check_mark:
+- MongoDB :heavy_check_mark:
+- Redis :heavy_check_mark:
+- Terraform 
 - EKS
 
 ## Local environment
@@ -127,7 +132,7 @@ curl -XPOST http://localhost:3000/v1/short_urls --header "Content-Type: applicat
 
 ```json
 {
-  "hash": "ckinsrq9400000108qln5h3ah",
+  "hash": "DWv53EaGg",
   "original_url": "https://really-long-website-url.com",
   "user_id": "5fd6ac5c6884b412d6ec1475",
   "expires_at": 100,
@@ -140,7 +145,7 @@ curl -XPOST http://localhost:3000/v1/short_urls --header "Content-Type: applicat
 #### Request
 
 ```bash
-curl http://localhost:3000/v1/short_urls/ckinsrq9400000108qln5h3ah
+curl http://localhost:3000/v1/short_urls/DWv53EaGg
 ```
 
 #### Response
