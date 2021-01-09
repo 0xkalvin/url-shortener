@@ -5,7 +5,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	log "github.com/0xkalvin/url-shortener/logger"
 	"github.com/0xkalvin/url-shortener/schemas"
 	"github.com/0xkalvin/url-shortener/services"
 )
@@ -47,16 +46,12 @@ func (controller ShortURLController) Create(context *gin.Context) {
 
 		return
 	}
-	logger := log.GetLogger()
-
-	logger.Info("Finished to create URL")
 
 	context.JSON(http.StatusOK, createdURL)
 }
 
 // Show returns an URL
 func (controller ShortURLController) Show(context *gin.Context) {
-	logger := log.GetLogger()
 
 	hash := context.Param("hash")
 
@@ -70,8 +65,6 @@ func (controller ShortURLController) Show(context *gin.Context) {
 
 		return
 	}
-
-	logger.Info("Finished to find URL")
 
 	context.JSON(
 		http.StatusOK,

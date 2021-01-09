@@ -55,8 +55,8 @@ func (repository *ShortURLRepository) Create(url *models.ShortURL) (*models.Shor
 	return url, nil
 }
 
-// FindOriginalURLByHash method returns the original URL from mongoDB collection by hash
-func (repository *ShortURLRepository) FindOriginalURLByHash(hash string) (string, error) {
+// FindURLByFilter method returns the URL from mongoDB collection by some filter
+func (repository *ShortURLRepository) FindURLByFilter(filter bson.M) (*models.ShortURL, error) {
 	logger := log.GetLogger()
 
 	collection := repository.Database.Collection("urls")
@@ -69,20 +69,20 @@ func (repository *ShortURLRepository) FindOriginalURLByHash(hash string) (string
 
 	err := collection.FindOne(
 		ctx,
-		bson.M{"hash": hash},
+		filter,
 	).Decode(&shortURL)
 
 	if err != nil {
 		logger.WithFields(logrus.Fields{
 			"error": err,
-		}).Error("Failed to find URL on MongoDB collection")
+		}).Debug("URL not found for filter")
 
-		return "", err
+		return nil, err
 	}
 
 	logger.Info("Successfully found URL")
 
-	return shortURL.OriginalURL, nil
+	return &shortURL, nil
 }
 
 // SaveToCache method persists an URL object into the cache layer

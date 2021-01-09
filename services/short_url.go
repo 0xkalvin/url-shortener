@@ -3,6 +3,7 @@ package services
 import (
 	"time"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	log "github.com/0xkalvin/url-shortener/logger"
@@ -50,6 +51,19 @@ func (service *ShortURLService) CreateURL(payload schemas.ShortURLPostSchema) (*
 		return nil, err
 	}
 
+	filter := bson.M{
+		"original_url": payload.OriginalURL,
+		"user_id":      userObjectID,
+	}
+
+	alreadyExists, err := service.ShortURLRepository.FindURLByFilter(filter)
+
+	if alreadyExists != nil {
+		logger.Error("Original URL already exists, returning its object")
+
+		return alreadyExists, nil
+	}
+
 	shortURL := &models.ShortURL{
 		Hash:        cuid.New(),
 		OriginalURL: payload.OriginalURL,
@@ -89,7 +103,11 @@ func (service *ShortURLService) FindOneURLByHash(hash string) (string, error) {
 
 	logger.Info("Looking for URL on MongoDB collection")
 
-	originalURL, err = service.ShortURLRepository.FindOriginalURLByHash(hash)
+	filter := bson.M{
+		"hash": hash,
+	}
+
+	url, err := service.ShortURLRepository.FindURLByFilter(filter)
 
 	if err != nil {
 		logger.Error("Failed to find URL entity")
@@ -97,5 +115,5 @@ func (service *ShortURLService) FindOneURLByHash(hash string) (string, error) {
 		return "", err
 	}
 
-	return originalURL, nil
+	return url.OriginalURL, nil
 }
