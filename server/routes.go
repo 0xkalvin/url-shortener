@@ -41,7 +41,7 @@ func initializeRouter() *gin.Engine {
 
 		v1.POST("/short_urls", shortURLController.Create)
 		v1.GET("/short_urls/:hash", shortURLController.Show)
-
+		v1.GET("/short_urls/:hash/redirect", shortURLController.Redirect)
 	}
 
 	router.NoRoute(func(context *gin.Context) {

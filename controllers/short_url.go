@@ -71,3 +71,25 @@ func (controller ShortURLController) Show(context *gin.Context) {
 		gin.H{"original_url": originalURL},
 	)
 }
+
+// Redirect redirects to the original URL
+func (controller ShortURLController) Redirect(context *gin.Context) {
+	logger := log.GetLogger()
+
+	hash := context.Param("hash")
+
+	originalURL, err := controller.Service.FindOneURLByHash(hash)
+
+	if err != nil {
+		context.JSON(
+			http.StatusInternalServerError,
+			gin.H{"error_type": "Internal server error"},
+		)
+
+		return
+	}
+
+	logger.Info("Redirecting to original URL")
+
+	context.Redirect(http.StatusMovedPermanently, originalURL)
+}
