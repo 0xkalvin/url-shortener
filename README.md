@@ -153,3 +153,15 @@ curl http://localhost:3000/v1/short_urls/DWv53EaGg
 ```json
 { "original_url": "https://really-long-website-url.com" }
 ```
+
+### GET /short_urls/:hash/redirect
+
+#### Request
+
+```bash
+curl http://localhost:3000/v1/short_urls/DWv53EaGg/redirect
+```
+
+#### Response
+
+It redirects to the original URL
