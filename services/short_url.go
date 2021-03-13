@@ -1,6 +1,8 @@
 package services
 
 import (
+	"os"
+	"strconv"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -72,6 +74,10 @@ func (service *ShortURLService) CreateURL(payload schemas.ShortURLPostSchema) (*
 		return nil, err
 	}
 
+	if payload.ExpiresAt == 0 {
+		payload.ExpiresAt, _ = strconv.Atoi(os.Getenv("DEFAULT_EXPIRATION_HOURS"))
+	}
+
 	shortURL := &models.ShortURL{
 		Hash:        hash,
 		OriginalURL: payload.OriginalURL,
@@ -106,6 +112,10 @@ func (service *ShortURLService) FindOneURLByHash(hash string) (string, error) {
 	originalURL, err := service.ShortURLRepository.FindOnCacheByHash(hash)
 
 	if err == nil {
+		newExpiration, _ := strconv.Atoi(os.Getenv("DEFAULT_EXPIRATION_HOURS"))
+
+		service.ShortURLRepository.UpdateExpiration(hash, newExpiration)
+
 		return originalURL, nil
 	}
 
