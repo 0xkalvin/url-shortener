@@ -120,7 +120,7 @@ func (repository *ShortURLRepository) FindOnCacheByHash(hash string) (string, er
 	if err != nil {
 		logger.WithFields(logrus.Fields{
 			"error": err,
-		}).Error("Failed to find URL on redis")
+		}).Debug("URL is no longer on cache")
 
 		return "", err
 	}
@@ -128,4 +128,27 @@ func (repository *ShortURLRepository) FindOnCacheByHash(hash string) (string, er
 	logger.Info("Found URL on cache")
 
 	return originalURL, nil
+}
+
+// UpdateExpiration updates key expiration timeout on redis
+func (repository *ShortURLRepository) UpdateExpiration(hash string, newExpiration int) error {
+	logger := log.GetLogger()
+
+	ctx := context.Background()
+
+	expiration := time.Minute * time.Duration(newExpiration)
+
+	_, err := repository.Cache.Expire(ctx, hash, expiration).Result()
+
+	if err != nil {
+		logger.WithFields(logrus.Fields{
+			"error": err,
+		}).Error("Failed to refresh key expiration timeout")
+
+		return err
+	}
+
+	logger.Info("Updated key expiration")
+
+	return nil
 }
