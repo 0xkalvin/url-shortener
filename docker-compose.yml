@@ -32,6 +32,7 @@ services:
       - MONGODB_USERNAME=root
       - MONGODB_PASSWORD=rootpassword
       - MONGODB_ENDPOINT=mongodb:27017
+      - DEFAULT_EXPIRATION_HOURS=2
     depends_on:
       - mongodb
       - redis
