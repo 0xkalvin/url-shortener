@@ -1,6 +1,6 @@
 # URL Shortener
 
-A highly scalable URL shortener API written in golang.
+A high throughput, horizontally scalable URL shortener solution using Go, Redis, MongoDB, Terraform, and Kubernetes on EKS.
 
 <p align="center">
 <img src="./docs/images/diagram.png" alt="drawing" width="800" height="400"/>
@@ -13,7 +13,18 @@ A highly scalable URL shortener API written in golang.
 - MongoDB :heavy_check_mark:
 - Redis :heavy_check_mark:
 - Terraform :heavy_check_mark:
-- EKS :heavy_check_mark:
+- Kubernetes on EKS :heavy_check_mark:
+
+## System Design
+
+This section aims to go through the technical decisions behind the solution architecture. 
+
+First of all, an URL Shortener should handle a lot of URL redirections concurrently, avoiding downtime as much as possible, in order to keep those short URLs working.  It's a read-heavy system and has a specific room for optimization: hot URLs. Some URLs will be fetched much more frequently than others, so it makes sense to keep them in some kind of cache.
+
+To achieve the requirements,  the system stores hot URLs in an in-memory database: a Redis instance. When an URL is created, it is cached with an expiration lifespan. If the URL is fetched before this span ends, the expiration span is refreshed, so that a commonly used URL keeps having a fast response time. When the expiration span is reached, the URL will be only available at the main data storage, in this case, a MongoDB instance. Because there's no need for strong consistency or relational dependency, a NoSQL database is a good choice to store users' and URLs' information. Golang is a very good language to handle concurrency, so it's great for building fast servers. 
+
+To handle millions of users, the application needs to scale horizontally. By running everything as containers inside a kubernetes cluster, we can easily start up new instances for the application backend  API or MongoDB. 
+Although in this example we don't use shards, MongoDB supports sharding, which is a strong solution if our data grows really large. 
 
 ## Production environment
 
