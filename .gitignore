@@ -16,3 +16,8 @@
 
 # Project binary
 url-shortener
+
+# Terraform
+.terraform
+*.apply
+*tfstate*
