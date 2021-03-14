@@ -74,7 +74,7 @@ In order to test it out, get the load balance endpoint by
 kubectl describe service url-shortener
 ```
 
-That's is! Now you can start generating short URLs by calling the API endpoints. :rocket:
+That's it! Now you can start generating short URLs by calling the API endpoints. :rocket:
 
 ## Local environment
 
