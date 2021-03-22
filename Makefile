@@ -2,7 +2,7 @@
 
 NAME=url-shortener
 
-default: run
+default: all
 
 all: database url-shortener
 
