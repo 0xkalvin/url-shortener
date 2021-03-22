@@ -5,6 +5,7 @@ import (
 	"time"
 
 	redis "github.com/go-redis/redis/v8"
+	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -12,6 +13,11 @@ import (
 
 	log "github.com/0xkalvin/url-shortener/logger"
 	"github.com/0xkalvin/url-shortener/models"
+)
+
+// Known error objects for URL
+var (
+	ErrURLNotFound = errors.New("URL not found")
 )
 
 // ShortURLRepository abstraction
@@ -73,11 +79,12 @@ func (repository *ShortURLRepository) FindURLByFilter(filter bson.M) (*models.Sh
 	).Decode(&shortURL)
 
 	if err != nil {
-		logger.WithFields(logrus.Fields{
-			"error": err,
-		}).Debug("URL not found for filter")
-
-		return nil, err
+		switch err {
+		case mongo.ErrNoDocuments:
+			return nil, ErrURLNotFound
+		default:
+			return nil, errors.Wrap(err, "Error fetching URL")
+		}
 	}
 
 	logger.Info("Successfully found URL")

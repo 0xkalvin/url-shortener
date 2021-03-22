@@ -1,12 +1,14 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	log "github.com/0xkalvin/url-shortener/logger"
+	"github.com/0xkalvin/url-shortener/repositories"
 	"github.com/0xkalvin/url-shortener/schemas"
 	"github.com/0xkalvin/url-shortener/services"
 )
@@ -83,12 +85,25 @@ func (controller UserController) Show(context *gin.Context) {
 	user, err := controller.Service.FindOneUser(userObjectID)
 
 	if err != nil {
-		context.JSON(
-			http.StatusInternalServerError,
-			gin.H{"error_type": "Internal server error"},
-		)
+		switch err {
+		case repositories.ErrUserNotFound:
+			context.JSON(
+				http.StatusNotFound,
+				gin.H{
+					"error_message": fmt.Sprintf("User %s not found", userIDAsString),
+					"error_type":    "Not found",
+				},
+			)
 
-		return
+			return
+		default:
+			context.JSON(
+				http.StatusInternalServerError,
+				gin.H{"error_type": "Internal server error"},
+			)
+
+			return
+		}
 	}
 
 	context.JSON(http.StatusOK, user)

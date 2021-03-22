@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -11,6 +12,11 @@ import (
 
 	log "github.com/0xkalvin/url-shortener/logger"
 	"github.com/0xkalvin/url-shortener/models"
+)
+
+// Known error objects for user
+var (
+	ErrUserNotFound = errors.New("User not found")
 )
 
 // UserRepository abstraction
@@ -66,11 +72,16 @@ func (repository *UserRepository) FindByID(objectID primitive.ObjectID) (*models
 	).Decode(&user)
 
 	if err != nil {
-		logger.WithFields(logrus.Fields{
-			"error": err,
-		}).Error("Failed to find user on collection")
+		switch err {
+		case mongo.ErrNoDocuments:
+			return nil, ErrUserNotFound
+		default:
+			logger.WithFields(logrus.Fields{
+				"error": err,
+			}).Error("Failed to find user on collection")
 
-		return nil, err
+			return nil, errors.Wrap(err, "Error fetching user")
+		}
 	}
 
 	logger.Info("Successfully found user")
